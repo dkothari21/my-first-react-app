@@ -1,8 +1,11 @@
 import './App.css';
-import {useState} from 'react'
+import React, {useState} from 'react'
 import Title from './compnents/Title';
+import Modal from './compnents/Modal';
 
 function App() {
+
+  const[showModal, setShowModal] = useState(false)
 
   const [showEvents, setShowEvents] = useState(true)
 
@@ -23,13 +26,23 @@ function App() {
     })
     console.log(id)
   }
+
+  const handleClose = () => {
+      setShowModal(false)
+  }
+
+
+  const subtitle = "All the latest events in ROC"
   return (
     <div className="App">
-      <Title />
-      {showEvents && <div>
+      <Title title="Events in your area" subtitle={subtitle} />
+
+      {showEvents && (
+      <div>
         <button onClick={() => 
               setShowEvents(false)}>hide event</button>
       </div>
+      )
       } 
       { !showEvents &&
       <div>
@@ -40,13 +53,25 @@ function App() {
       {showEvents && events
       .map((event, index) =>
         (
-          <div key={event.id}>
+          <React.Fragment key={event.id}>
             <h2>{index} - {event.title} - with id {event.id}</h2>
             <button onClick={() => {
               handleClick(event.id)}}>delete event</button>
-          </div>
+          </React.Fragment>
         )
       )}
+
+    <button onClick={() => 
+              setShowModal(true)}>Open</button>
+
+    {showModal && <Modal handleClose={handleClose}>
+      <h2>Test for the h2</h2>
+
+      <p> This is simple text and it is paragraph</p>
+
+      <button onClick={handleClose}>close</button>
+    </Modal>}
+
     </div>
   );
 }
